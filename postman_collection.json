@@ -1,0 +1,28 @@
+{
+  "info": { "name": "Pasar Nusantara REST API", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" },
+  "variable": [{ "key": "base", "value": "http://localhost/marketplace" }],
+  "item": [
+    { "name": "1. GET semua produk", "request": { "method": "GET", "url": "{{base}}/api/produk.php" } },
+    { "name": "2. GET detail produk id=1", "request": { "method": "GET", "url": "{{base}}/api/produk.php?id=1" } },
+    { "name": "3. GET produk tidak ada (404)", "request": { "method": "GET", "url": "{{base}}/api/produk.php?id=999" } },
+    { "name": "4. GET id tidak valid (400)", "request": { "method": "GET", "url": "{{base}}/api/produk.php?id=abc" } },
+    { "name": "5. GET kategori", "request": { "method": "GET", "url": "{{base}}/api/kategori.php" } },
+    { "name": "6. POST pesanan (201)", "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"id_pembeli\": 3,\n  \"nama_penerima\": \"Budi Pembeli\",\n  \"telepon_penerima\": \"081200000003\",\n  \"alamat_pengiriman\": \"Jl. Merdeka No. 10, Jakarta\",\n  \"catatan\": \"Dibungkus rapi\",\n  \"items\": [\n    { \"id_produk\": 2, \"jumlah\": 2 },\n    { \"id_produk\": 6, \"jumlah\": 3 }\n  ]\n}" },
+        "url": "{{base}}/api/pesanan.php" } },
+    { "name": "7. POST validasi gagal (422)", "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{ \"id_pembeli\": 3, \"nama_penerima\": \"\", \"telepon_penerima\": \"abc\", \"items\": [] }" },
+        "url": "{{base}}/api/pesanan.php" } },
+    { "name": "8. POST stok tidak cukup (409)", "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"id_pembeli\": 3,\n  \"nama_penerima\": \"Budi\",\n  \"telepon_penerima\": \"081200000003\",\n  \"alamat_pengiriman\": \"Jakarta\",\n  \"items\": [{ \"id_produk\": 1, \"jumlah\": 9999 }]\n}" },
+        "url": "{{base}}/api/pesanan.php" } },
+    { "name": "9. GET detail pesanan id=1", "request": { "method": "GET", "url": "{{base}}/api/pesanan.php?id=1" } },
+    { "name": "10. DELETE produk (405)", "request": { "method": "DELETE", "url": "{{base}}/api/produk.php" } }
+  ]
+}
